@@ -1,12 +1,17 @@
 class lista:
+	def __init__(self):
+		self.number=None
+		self.next=None
 	def ingresar_lista(self,number):#Put a element to the list
 		while self.next!=None:
 			self=self.next
-		tmp=lista()
-		tmp.number=number
-		self.next=tmp
-		tmp.next=None
-
+		if self.number==None:
+			self.number=number
+		else:
+			tmp=lista()
+			tmp.number=number
+			self.next=tmp
+			tmp.next=None
 	def print_lista(self):#Print the list
 		if self==None:
 			print("Your list is completly empty")
@@ -39,19 +44,17 @@ class lista:
 			del self
 			return head
 
-def init(a1,number):#Change a number to a list
-	head=a1
+def init(lista1,number):#Change a number to a list
+	head=lista1
 	tmp=lista()
 	while  number!=0:
-		a1.ingresar_lista(number%10)
+		lista1.ingresar_lista(number%10)
 		number=int(number/10)
 	return head
 
-a1=lista()
-a1.number=0
-a1.next=None
-a1=init(a1,123124)
-a1.print_lista()
-a1=a1.delet_lista_element(3)
+lista1=lista()
+lista1=init(lista1,123124)
+lista1.print_lista()
+lista1=lista1.delet_lista_element(3)
 print('')
-a1.print_lista()
+lista1.print_lista()
