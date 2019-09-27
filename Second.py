@@ -1,6 +1,8 @@
 class lista:
+	def __init__(self):
+    	self.number=None
+	  	self.next=None
 	def ingresar_lista(self,number):#Put a element to the list
-		
 		if(self.number==None):
 			self.number=number
 		else:
@@ -106,16 +108,9 @@ def Sumar(a1,a2):#Is the function that add the two lists
 a1=lista()
 a2=lista()
 a3=lista()
-a3.number=None
-a3.next=None
-a1.number=None
-a1.next=None
-a2.number=None
-a2.next=None
 c=input()
 Reading(c,a1,a2)
 #sumar(a1,a2)
-
 a1.print_lista()
 print()
 a2.print_lista()
