@@ -1,7 +1,7 @@
 class lista:
 	def __init__(self):
-    	self.number=None
-	  	self.next=None
+		self.number=None
+		self.next=None
 	def ingresar_lista(self,number):#Put a element to the list
 		if(self.number==None):
 			self.number=number
@@ -117,3 +117,4 @@ a2.print_lista()
 a3=Sumar(a1,a2)
 print()
 a3.print_lista()
+
