@@ -7,7 +7,7 @@ import librosa as lr
 from glob import glob
 from concurrent.futures import ThreadPoolExecutor, as_completed
 def Reader(files,root):
-	path1='C:\\Users\\1\\Documents\\Python\\Programacion_Paralela\\Info_files'
+	path1='C:\\Users\\1\\Documents\\Python\\Programacion_Paralela\\Info_files'#IS the path of the folder where will be the files
 	audio_files=glob(str(root)+'\\'+str(files))
 	f=open(path1+"\\"+str(files)+".txt",'w')#os.createdirs..
 	p=open(path1+"\\"+str(files)+"_Catalogs.txt",'w')
