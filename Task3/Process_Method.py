@@ -7,17 +7,11 @@ import librosa as lr
 from glob import glob
 from concurrent.futures import ProcessPoolExecutor
 def Reader(files,root):
-	path1='C:\\Users\\1\\Documents\\Python\\Programacion_Paralela\\Info_files'#is the folder where willl be the files
+	#path1='C:\\Users\\1\\Documents\\Python\\Programacion_Paralela\\Info_files'
 	audio_files=glob(str(root)+'\\'+str(files))
-	f=open(path1+"\\"+str(files)+".txt",'w')#os.createdirs..
-	p=open(path1+"\\"+str(files)+"_Catalogs.txt",'w')
-	for i in range(len(audio_files)):
-		#print("dasjdasjk")
-		x, fs = lr.load(audio_files[i])
-		mfccs = lr.feature.mfcc(x, sr=fs)
-		f.write(files+': ',)
-		f.write(str(mfccs.shape)+'\n')
-		p.write(str(audio_files[i])+'\n')
+	x, fs = lr.load(audio_files[i])
+	mfccs = lr.feature.mfcc(x, sr=fs)
+	numpy.savetxt("{}/{}.csv".format(root, files), mfccs, delimiter=",")
 def Organizador(path):#It organize to read the audio files
 	print("Joder")
 	results=('hola','pepe')
