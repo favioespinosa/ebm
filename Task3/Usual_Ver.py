@@ -10,6 +10,7 @@ def Reader(audio_files,files):
 	for i in range(len(audio_files)):
 		x, fs = lr.load(audio_files[i])
 		mfccs = lr.feature.mfcc(x, sr=fs)
+		numpy.savetxt("{}/{}.csv".format(root, files), mfccs, delimiter=",")
 		return str(mfccs.shape)
 def Organizador(path):#It organize to read the audio files
 	my_array=np.array([[" "],[" "]])
