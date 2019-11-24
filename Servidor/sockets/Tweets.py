@@ -43,7 +43,7 @@ class arr_twets():
 				self.sort_twets()
 	def popular_twets(self,data,name):
 		popular=pd.DataFrame(columns=['Author','RTs'])
-		for i in range(len(data['User Name']):
+		for i in range(20):
 			if i%2==0:
 				popular=popular.append({'Author':data['User Name'][self.elements[i+1]],'RTs':self.elements[i]},ignore_index=True)
 		print(popular)
@@ -77,7 +77,7 @@ def finder(lista,palabra):
 def words(data,name):
 	lista=pd.DataFrame(columns=['Word','Quantity'])
 	try:
-		for i in range(10):
+		for i in range(len(data['Tweet content]):
 			for j in range(len(data['Tweet content'][i].split(' '))):
 				existe,indice=finder(lista,data['Tweet content'][i].split(' ')[j])
 				if existe==True:
