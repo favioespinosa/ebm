@@ -43,5 +43,5 @@ def worker(sock):
         th.start()
 with socket.socket() as sock:
     sock.bind((socket.gethostname(), 1234))
-    sock.listen()
+    sock.listen(5)
     worker(sock)
