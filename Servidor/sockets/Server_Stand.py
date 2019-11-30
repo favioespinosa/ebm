@@ -19,15 +19,19 @@ def process_request(conn, addr):
         #print(msg)
         data=pickle.loads(msg)
         print(data)
-        if comando=='stat':
+        if comando=='STAT':
             Tweets.main(data,'Results.csv')
-        elif comando=='enti':
-            result=''
-            nlp = StanfordCoreNLP('http://127.0.0.1:9000')
+           #conn.close()
+        elif comando=='ENTI':
+            result=[]
+            nlp = StanfordCoreNLP('http://localhost:9000')
             for i in range(len(data['Tweet content'])):
-                result += Tweets.Stands(nlp, data['Tweet content'][i])
-            with open("Results.csv") as f:
-                f.write(result)
+                 result.append(Tweets.Stands(nlp, data['Tweet content'][i]))
+                 print(result)
+            with open("Results.csv",'w') as f:
+                for i in range(len(result)):
+                    f.write(str(result[i]))
+
         else:
             print("ERROR")
             conn.close()
@@ -41,7 +45,14 @@ def worker(sock):
         conn, addr = sock.accept()
         th = threading.Thread(target=process_request, args=(conn, addr))
         th.start()
-with socket.socket() as sock:
-    sock.bind((socket.gethostname(), 1234))
-    sock.listen(5)
-    worker(sock)
+if __name__=='__main__':
+
+    with socket.socket() as sock:
+        sock.bind(("", 1234))
+        sock.listen(5)
+        workers_list = [multiprocessing.Process(target=worker, args=(sock,))
+                       for _ in range(3)] 
+        for w in workers_list:
+            w.start()
+        for w in workers_list:
+            w.join()
