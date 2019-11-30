@@ -1,50 +1,49 @@
-import sys
-import json
-import cgi
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from socket import *
-import threading
-import os
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import Tweets
 import pickle
+import pandas as pd
 from pycorenlp import StanfordCoreNLP
-import multiprocessing
-def CreateServer():
-    serversocket=socket(AF_INET,SOCK_STREAM)
-    try:
-        serversocket.bind(('localhost',8000))
-        serversocket.listen(5)
-        (client,addr)=serversocket.accept()
-        while (1):
-            comando=client.recv(4096)
-            longitud=client.recv(4096)
-            comando=comando.decode('utf-8')
-            longitud=longitud.decode('utf-8')
-            print(int(longitud))
-            print(comando)
-            msg = client.recv(int(longitud))
-            print(msg)
-            data=pickle.loads(msg)
-            if comando=='stat':
-                Tweets.main(data,'Results.csv')
-            elif comando=='enti':
-                result=''
-                nlp = StanfordCoreNLP('http://127.0.0.1:9000')
-                for i in range(len(data['Tweet content'])):
-                    result += Tweets.Stands(nlp, data['Tweet content'][i])
-                with open("Results.csv") as f:
-                    f.write(result)
-            else:
-                print("ERROR")
-                client.close()
-                return -1
-            with open("Results.csv") as f:
-                data = f.read()
-            client.sendall(data.encode("utf-8"))
-            client.close()
+import os
+from multiprocessing import Process
+import Tweets
+class RequestHeandler(BaseHTTPRequestHandler):
+    def _set_headers(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
 
-    except KeyboardInterrupt:
-        print("Shutt")
-if __name__=='__main__':
-    CreateServer()
+    def do_GET(self):
+        self._set_headers()
+        self.wfile.write(self._html("hi!"))
+
+    def do_HEAD(self):
+        self._set_headers()
+
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        print(content_length)
+        data = self.rfile.read(content_length)
+        data = pickle.loads(data)
+        self._set_headers()
+        if self.path == '/stat':
+            Tweets.main(data,'Result.csv')
+        elif self.path=='/enti':
+            result=[]
+            nlp = StanfordCoreNLP('http://localhost:9000')
+            for i in range(len(data['Tweet content'])):
+                 result.append(Tweets.Stands(nlp, data['Tweet content'][i]))
+                 print(result)
+            with open("Results.csv",'w') as f:
+                for i in range(len(result)):
+                    f.write(str(result[i]))
+        with open("Results.csv") as f:
+            data = f.read()
+        self.wfile.write(data.encode('utf-8'))
+
+def run(server_class=HTTPServer, handler_class=RequestHeandler, addr="localhost", port=8000):
+    server_address = (addr, port)
+    httpd = server_class(server_address, handler_class)
+    print(f"Starting httpd server on {addr}:{port}")
+    httpd.serve_forever()
+
+if __name__ == '__main__':
+    run()
