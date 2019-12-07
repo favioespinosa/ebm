@@ -77,7 +77,7 @@ def finder(lista,palabra):
 def words(data,name):
 	lista=pd.DataFrame(columns=['Word','Quantity'])
 	try:
-		for i in range(len(data['Tweet content])):
+		for i in range(len(data['Tweet content'])):
 			for j in range(len(data['Tweet content'][i].split(' '))):
 				existe,indice=finder(lista,data['Tweet content'][i].split(' ')[j])
 				if existe==True:
