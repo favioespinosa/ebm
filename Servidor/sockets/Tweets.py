@@ -77,7 +77,7 @@ def finder(lista,palabra):
 def words(data,name):
 	lista=pd.DataFrame(columns=['Word','Quantity'])
 	try:
-		for i in range(len(data['Tweet content'])):
+		for i in range(10):
 			for j in range(len(data['Tweet content'][i].split(' '))):
 				existe,indice=finder(lista,data['Tweet content'][i].split(' ')[j])
 				if existe==True:
@@ -91,7 +91,7 @@ def words(data,name):
 	lista.iloc[0:11].to_csv(name,mode='a',sep='\t')
 def main(data,name_file_csv):
 	t_start = time.time()
-	with ThreadPoolExecutor(max_workers=1) as pool:
+	with ThreadPoolExecutor(max_workers=24) as pool:
 		pool.submit(words,data,name_file_csv)
 	print(time.time()-t_start)
 	pepe=arr_twets('RTs',data)
@@ -99,12 +99,10 @@ def main(data,name_file_csv):
 	pepe.popular_twets(data,name_file_csv)
 	maria.popular_Authors(data,name_file_csv)
 def Stands(nlp, data):
-	print(data)
-	result = nlp.annotate(data, properties={ 'annotators': 'ner', 'outputFormat': 'csv', 'timeout': 1000, })
+	result = nlp.annotate(data, properties={'annotators': 'ner','outputFormat': 'json','timeout': 10000,})
 	pos = []
-	if type(result) == str:
-		return result
-	for word in result["sentences"][1]['tokens']:
+	for word in result["sentences"][0]['tokens']:
 		pos.append('{} ({})'.format(word['word'], word['ner']))
-		print(pos)
-	return (" ".join(pos))
+	res = " ".join(pos)
+    #print(res)
+	return pos
