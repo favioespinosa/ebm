@@ -35,7 +35,7 @@ class RequestHeandler(BaseHTTPRequestHandler):
             with open("Results.csv",'w') as f:
                 for i in range(len(result)):
                     f.write(str(result[i]))
-        with open("Results.csv") as f:
+        with open("Results.csv",'r') as f:
             data = f.read()
         self.wfile.write(data.encode('utf-8'))
 
